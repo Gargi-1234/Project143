@@ -21,9 +21,24 @@ export default class PopularScreen extends Component {
 
   getData = () => {
     /*Complete the getData() function.*/
-
-
-  };
+    axios.get(ngrok_url)
+    .then(response => {
+      this.setState({ data: response.data });
+    })
+    .catch(error => {
+      console.error(error);
+    });
+ };
+ keyExtractor = (item, index) => item.id.toString()
+ renderItem = ({ item }) => {
+   return (
+     <View style={styles.cardContainer}>
+       <ImageBackground source={{ uri: item.poster }} style={styles.posterImage} />
+       <Text style={styles.title}>{item.title}</Text>
+       <Text style={styles.subtitle}>{item.releaseDate}</Text>
+     </View>
+   );
+ };
 
   render() {
     const { data } = this.state;
@@ -34,7 +49,11 @@ export default class PopularScreen extends Component {
           style={{ flex: 1 }}
         >
           {/* Add FlatList component here to show the list of articles*/}
-          
+          <FlatList
+            data={data}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.renderItem}
+          />
         </ImageBackground>
       </View>
     );
